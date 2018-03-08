@@ -1,0 +1,16 @@
+plt.close()
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+
+xgrid = np.arange(0, 6, 0.25)
+ygrid = np.arange(0, 10, 0.25)
+xgrid, ygrid = np.meshgrid(xgrid, ygrid)
+
+zgrid = (xgrid - 3)**2 + (ygrid - 5)**2
+
+ax.plot_surface(xgrid, ygrid, zgrid, cmap=cm.coolwarm, alpha=0.8)
+
+ax.set_xlabel('x1')
+ax.set_ylabel('x2')
+ax.set_zlabel('y')
+plt.show()
