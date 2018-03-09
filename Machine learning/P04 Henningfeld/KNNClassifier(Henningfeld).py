@@ -18,43 +18,42 @@ class KNNClassifier:
         
     def predict(self, X):
         
-        predictions = []
+        predictions = [] #create array for predictions
         
-        
-        for row in X:
+        for row in X: #for each point in dataset
             
-            distances = ((row[0]-X[:,0])**2+(row[1]-X[:,1])**2)
+            distances = (np.sum((row-self.X)**2, axis=1))**(0.5) #find distances from all other points
 
-            idx = np.argsort(distances)[:self.K]
+            idx = np.argsort(distances)[:self.K] #sort distances and pick out smallest K distances
 
-            knn_labels = self.y[idx]
+            knn_labels = self.y[idx]#pick out labels for smallest K points
 
-            knn_distances = distances[idx]
+            knn_distances = distances[idx]#find distances for smallest K points
 
-            best_dist = 0
+            best_dist = 0 #initialize bests
             best_class = 0
             best_count = 0
         
-            for each in self.classes:
+            for each in self.classes: #for each possible class
                 
-                temp_count = np.sum(knn_labels==each)
+                temp_count = np.sum(knn_labels==each) #get number of predictions for that class
 
-                temp_dist = np.sum(knn_distances[knn_labels==each])
+                temp_dist = np.sum(knn_distances[knn_labels==each])#find distances for those predictions
 
-                if temp_count>best_count:
+                if temp_count>best_count:#if predictions for this class is better than previous
                     best_dist = temp_dist
                     best_class = each
                     best_count = temp_count
                     
-                if temp_count==best_count and temp_dist<best_dist:
+                if temp_count==best_count and temp_dist<best_dist:#if predictions is equal but distance is smaller
                     best_dist = temp_dist
                     best_class = each
                     best_count = temp_count
                 
-            predictions.append(best_class)
+            predictions.append(best_class) #append to predictions
 
-        predictions = np.array(predictions)
-        return predictions
+        predictions = np.array(predictions) #convert to np.array
+        return predictions #return predictions
         
 
     def score(self, X, y):
@@ -88,14 +87,14 @@ y = np.random.choice(['a','b','c','d'],20)
 knn_mod_3 = KNNClassifier(X,y,3)
 print(knn_mod_3.predict(X))
 print(knn_mod_3.score(X,y))
-
+plot_regions(knn_mod_3, X, y, 500)
 
 knn_mod_4 = KNNClassifier(X,y,4)
 print(knn_mod_4.score(X,y))
 print(knn_mod_4.predict(X))
-'''
+plot_regions(knn_mod_4, X, y, 500)
 
-'''
+
 np.random.seed(1548)
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
