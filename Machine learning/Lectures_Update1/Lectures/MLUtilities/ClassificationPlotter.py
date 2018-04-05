@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as mplc
 
-def plot_regions(model, X, y, num_ticks=100, fig_size = (8,6)):
+def plot_regions(model, X, y, num_ticks=100, fig_size = (8,6), display=True):
 
     # Convert X to numpy array
     X = np.array(X)
@@ -35,7 +35,9 @@ def plot_regions(model, X, y, num_ticks=100, fig_size = (8,6)):
     class_pts = model.predict(grid_pts)
 
     # Get list of classes
-    classes = sorted(list(set(y)))
+    #classes = sorted(list(set(y)))
+    classes = np.unique(y)
+    k = len(classes)    
         
     # create new list with numerical classes
     class_pts_2 = np.zeros(class_pts.shape)
@@ -53,15 +55,15 @@ def plot_regions(model, X, y, num_ticks=100, fig_size = (8,6)):
     plt.figure(figsize=fig_size)
     
     # Add color mesh
-    plt.pcolormesh(xticks, yticks, class_grid, cmap = my_cmap, zorder = 1)
+    plt.pcolormesh(xticks, yticks, class_grid, cmap = my_cmap, zorder = 1, 
+                   vmin=0, vmax=k-1 )
     
     # Add transparency layer
     plt.fill([x0,x0,x1,x1], [y0,y1,y1,y0], 'white', alpha=0.5, zorder = 2)
     
     # Select discrete cuts for color map
-    k = len(classes)
     cuts = np.arange(k) / (k - 1)
-#    cuts[-1] = 0.99
+    #cuts[-1] = 0.99
 
     # Add scatter plot for each class, with seperate colors and labels
     for i in range(k):
@@ -73,5 +75,7 @@ def plot_regions(model, X, y, num_ticks=100, fig_size = (8,6)):
 
     
     plt.legend()
-    plt.show()
+    
+    if(display):
+        plt.show()
     
